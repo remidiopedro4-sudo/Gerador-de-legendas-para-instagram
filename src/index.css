@@ -37,16 +37,16 @@ textarea:focus{border-color:#aaa}
 .lock{font-size:15px}
 .results{padding:58px 0 30px}
 .results-heading{margin-bottom:22px}
-.caption-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.caption-card{display:flex;flex-direction:column;min-height:290px;padding:20px;border:1px solid #303030;background:#0d0d0d}
+.caption-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.caption-card{display:flex;flex-direction:column;min-height:0;padding:22px;border:1px solid #303030;background:#0d0d0d}
 .card-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:17px;border-bottom:1px solid #292929}
 .card-number{color:#666}
 .card-label{color:#ddd;font-weight:600}
-.caption-text{white-space:pre-line;color:#bdbdbd;font-size:13px;line-height:1.8;margin:18px 0 24px;flex:1}
-.copy-button{height:40px;background:transparent;border:1px solid #454545;color:#eee;font-weight:600;transition:.2s}
+.caption-text{white-space:pre-line;color:#d0d0d0;font-size:14px;line-height:1.9;margin:20px 0 14px;max-width:820px}
+.paragraph-count{color:#666;font-size:9px;letter-spacing:1.4px;margin:0 0 14px}\n.copy-button{height:42px;background:transparent;border:1px solid #454545;color:#eee;font-weight:600;transition:.2s}
 .copy-button:hover,.copy-button.copied{background:#eee;color:#080808;border-color:#eee}
 .regenerate{display:block;margin:22px auto 0;padding:10px 14px;background:none;border:0;color:#aaa}
 .regenerate:hover{color:#fff}
 .footer{display:flex;justify-content:space-between;gap:16px;padding:26px 0 32px;margin-top:55px;border-top:1px solid #242424;color:#666;font-size:9px}
-@media(max-width:760px){.page-shell{width:min(100% - 32px,620px)}.hero{padding:62px 0 38px}h1{letter-spacing:-2.5px}.generator-panel{padding:22px}.caption-grid{grid-template-columns:1fr}.caption-card{min-height:230px}.footer{font-size:8px;letter-spacing:.8px}}
+@media(max-width:760px){.page-shell{width:min(100% - 32px,620px)}.hero{padding:62px 0 38px}h1{letter-spacing:-2.5px}.generator-panel{padding:22px}.caption-grid{grid-template-columns:1fr}.caption-card{min-height:0}.footer{font-size:8px;letter-spacing:.8px}}
 @media(max-width:420px){.top-note{font-size:8px;letter-spacing:1px}.panel-heading,.results-heading{align-items:flex-start}.optional,.result-count{font-size:8px}.input-footer{font-size:10px}.footer{flex-direction:column;gap:8px}}
