@@ -1,6 +1,6 @@
-# Legenda — Gerador de legendas para Instagram
+# Legenda — Gerador inteligente de legendas para Instagram
 
-Aplicação React + Vite para transformar uma frase ou ideia escrita pelo usuário em três versões de legenda: identificação, reflexão e conexão.
+Aplicação React + Vite que usa a OpenAI Responses API para transformar uma frase ou ideia em três legendas originais, cada uma com exatamente cinco parágrafos.
 
 ## Executar localmente
 
@@ -9,10 +9,22 @@ npm install
 npm run dev
 ```
 
+Para testar a função de geração localmente, use a Vercel CLI (`vercel dev`) e configure a variável de ambiente `OPENAI_API_KEY`.
+
+## Configuração na Vercel
+
+No projeto, abra **Settings → Environment Variables** e adicione:
+
+- Nome: `OPENAI_API_KEY`
+- Valor: sua chave secreta da API da OpenAI
+- Ambientes: Production, Preview e Development, conforme necessário.
+
+Depois, faça um novo deploy. Nunca coloque a chave no código do navegador ou no repositório.
+
 ## Build
 
 ```bash
 npm run build
 ```
 
-O gerador funciona no navegador, sem cadastro ou chave de API. As sugestões são montadas a partir da frase informada pelo usuário.
+A geração usa a API da OpenAI no servidor, mantendo a chave fora do navegador. O uso da API pode gerar custos conforme a conta e o consumo.
