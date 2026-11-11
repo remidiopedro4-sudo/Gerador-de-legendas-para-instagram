@@ -2,66 +2,48 @@ import { useState } from 'react';
 
 const pick = (items) => items[Math.floor(Math.random() * items.length)];
 
+const stopWords = new Set([
+  'a','à','as','às','o','os','um','uma','uns','umas','de','da','das','do','dos','em','no','na','nos','nas',
+  'por','para','com','sem','e','ou','que','se','é','ser','estar','foi','são','como','mais','menos','muito',
+  'muita','meu','minha','seu','sua','seus','suas','eu','você','vocês','ele','ela','eles','elas','isso','essa',
+  'esse','essa','aquela','aquele','quando','onde','porque','mas','também','já','não','sim','ao','aos','ter'
+]);
+
+function getKeywords(idea) {
+  const words = idea.toLocaleLowerCase('pt-BR').match(/[\p{L}\p{N}]+/gu) || [];
+  const meaningful = words.filter((word) => word.length > 2 && !stopWords.has(word));
+  return [...new Set(meaningful)].slice(0, 5);
+}
+
 function buildCaption(rawIdea, style) {
   const idea = rawIdea.trim().replace(/[.!?]+$/, '');
-  const quoted = "“" + idea + "”";
-  const openings = {
+  const quoted = '“' + idea + '”';
+  const keywords = getKeywords(idea);
+  const subject = keywords.length ? keywords.slice(0, 3).join(', ') : idea;
+  const variations = {
     Identificação: [
-      "Tem uma coisa sobre " + quoted.toLowerCase() + " que muita gente entende, mas nem sempre consegue colocar em palavras.",
-      "Talvez você já tenha se deparado com essa ideia: " + quoted + ". E, de alguma forma, ela faz sentido.",
-      "Nem sempre é fácil explicar por que uma ideia chama tanto a nossa atenção. Às vezes, basta ler: " + quoted + "."
+      'Quando você pensa em ' + quoted + ', talvez reconheça algo que já viveu. Nem sempre é fácil explicar essa sensação, mas muita gente passa por situações parecidas.',
+      'Essa ideia também aparece na vida real quando ' + subject + ' fazem parte das nossas escolhas. É nesse tipo de momento que a mensagem deixa de ser apenas palavras.',
+      'Talvez você já tenha tentado lidar com isso do seu jeito. Cada pessoa tem uma experiência diferente, mas encontrar alguém que entende o que sentimos faz diferença.',
+      'Por isso, vale olhar para ' + subject + ' com mais atenção e perceber como essa mensagem se conecta com a sua própria história.',
+      'Você já passou por algo que fez essa frase ganhar sentido?'
     ],
     Emocional: [
-      "Algumas ideias ficam na cabeça porque tocam em algo que a gente já sentiu. " + quoted + " é uma delas.",
-      "Por trás de " + quoted.toLowerCase() + ", existe uma reflexão que merece mais do que uma leitura rápida.",
-      "Tem palavras que fazem a gente parar por alguns segundos. " + quoted + " pode ser uma dessas."
+      'Às vezes, ' + quoted + ' toca em algo que a gente sente, mas não costuma dizer em voz alta. Algumas experiências ficam guardadas justamente porque significam mais do que parecem.',
+      'Quando ' + subject + ' entram nessa reflexão, podem trazer lembranças, dúvidas e sentimentos que cada pessoa reconhece de uma maneira.',
+      'Nem sempre conseguimos mudar uma situação imediatamente. Ainda assim, reconhecer o que ela desperta dentro de nós já é uma forma de começar a entendê-la.',
+      'Talvez essa seja a parte mais importante de ' + quoted + ': permitir que você olhe para o que está vivendo com sinceridade, sem se comparar com a jornada de ninguém.',
+      'Qual sentimento essa mensagem despertou em você?'
     ],
     Conversacional: [
-      "Vamos falar sobre uma coisa: " + quoted + ".",
-      "Sabe quando uma frase resume um pensamento que estava difícil de explicar? " + quoted + ".",
-      "Olha essa ideia com calma: " + quoted + ". Ela abre uma conversa interessante."
+      'Vamos trazer ' + quoted + ' para o dia a dia. Onde essa ideia aparece na sua rotina, nas suas escolhas ou na maneira como você enxerga as coisas?',
+      'Pense em ' + subject + ' por um instante. É possível encontrar exemplos disso em situações simples, até naquelas que normalmente passam despercebidas.',
+      'E não precisa existir uma única interpretação. O contexto de cada pessoa muda a forma como uma mensagem é entendida.',
+      'O importante é não deixar ' + quoted + ' apenas como uma frase bonita. Vale pensar no que ela significa para você e no que pode ser aplicado à sua realidade.',
+      'Quero saber sua opinião: você concorda com essa ideia?'
     ]
   };
-  const second = [
-    "O interessante é olhar além da frase. O que ela significa na prática, nas escolhas pequenas e na maneira como cada pessoa enxerga a própria realidade?",
-    "Quando a gente tira essa ideia do papel, percebe que ela pode aparecer em situações comuns, nas conversas, nas decisões e até na forma de interpretar o que acontece.",
-    "Não se trata apenas de concordar ou discordar. Vale entender o contexto, observar os detalhes e pensar em como essa mensagem se conecta com a vida real."
-  ];
-  const third = [
-    "E é justamente aí que surgem as dúvidas. Às vezes, existe uma distância entre aquilo que pensamos, aquilo que sentimos e aquilo que conseguimos colocar em prática.",
-    "Só que entender uma mensagem não significa que tudo fique simples de uma hora para outra. Cada pessoa tem seu tempo, suas experiências e seu próprio jeito de lidar com isso.",
-    "O desafio está em não ficar somente na primeira impressão. Uma reflexão ganha força quando nos faz questionar hábitos, pontos de vista e certezas."
-  ];
-  const fourth = [
-    "Talvez o primeiro passo seja olhar para essa ideia com honestidade, sem buscar uma resposta perfeita. Uma mudança de perspectiva também começa com uma pergunta bem feita.",
-    "No fim, o valor dessa reflexão está no que ela desperta em você. Não precisa transformar tudo imediatamente; entender melhor já pode mudar a maneira de enxergar a situação.",
-    "Uma boa ideia não precisa de exagero para fazer sentido. Precisa ser compreendida, relacionada à realidade e levada em consideração nas escolhas possíveis."
-  ];
-  const endings = [
-    "Agora me conta: como você enxerga essa ideia?",
-    "E você, já tinha pensado por esse lado?",
-    "Qual parte dessa reflexão mais conversa com o seu momento?"
-  ];
-  let p2 = pick(second);
-  let p3 = pick(third);
-  let p4 = pick(fourth);
-  if (style === 'Identificação') {
-    p2 = pick([
-      "Talvez você reconheça isso em alguma situação que já viveu. Não precisa ser exatamente igual: às vezes, o sentimento por trás da experiência é o que aproxima as pessoas.",
-      "É fácil se identificar quando uma mensagem dá nome a algo que parecia confuso. Cada pessoa encontra um significado diferente, de acordo com o que está vivendo."
-    ]);
-  } else if (style === 'Emocional') {
-    p3 = pick([
-      "E existe uma parte disso que nem sempre aparece por fora: os pensamentos que guardamos, as expectativas que criamos e as perguntas que continuam mesmo quando o assunto muda.",
-      "Às vezes, o que mais pesa não é a situação em si, mas tudo aquilo que ela representa. Reconhecer isso exige atenção e sinceridade consigo mesmo."
-    ]);
-  } else {
-    p4 = pick([
-      "Talvez valha fazer um exercício simples: pense em uma situação real em que essa mensagem se aplica. O que você percebe quando olha para ela sem pressa?",
-      "Uma forma de levar essa conversa adiante é observar onde essa ideia aparece no seu dia a dia. É nesse ponto que a reflexão deixa de ser abstrata."
-    ]);
-  }
-  return [pick(openings[style]), p2, p3, p4, pick(endings)].join('\n\n');
+  return variations[style].join('\n\n');
 }
 
 function generateCaptions(idea) {
