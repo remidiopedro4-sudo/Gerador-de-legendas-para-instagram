@@ -21,33 +21,81 @@ function buildCaption(rawPhrase, style) {
   const subject = keywords.slice(0, 3).join(', ');
   const focus = subject || phrase;
 
-  const captions = {
+  const openings = {
     Identificação: [
-      quoted,
-      'Quem já viveu algo parecido sabe que essa mensagem vai além das palavras. Existem momentos em que a gente se reconhece exatamente no que está escrito.',
-      'Na rotina, ' + focus + ' podem aparecer de formas diferentes para cada pessoa. Mesmo assim, certos sentimentos e experiências acabam aproximando histórias.',
-      'Talvez você também esteja passando por uma fase que faz essa frase ter ainda mais sentido. Cada um tem seu próprio caminho, seu tempo e suas batalhas.',
-      'Se essa mensagem falou com você, compartilhe com alguém que também precisa ler isso.'
+      'Tem coisa que a gente só entende de verdade quando passa por ela.',
+      'Às vezes, uma frase consegue explicar algo que a gente sente, mas não sabe colocar em palavras.',
+      'Quem já viveu uma situação parecida provavelmente vai entender o peso dessa mensagem.',
+      'Nem sempre é fácil encontrar palavras para descrever certas experiências.'
     ],
     Emocional: [
-      quoted,
-      'Tem frases que fazem a gente parar por alguns segundos, porque traduzem sentimentos que nem sempre conseguimos explicar.',
-      'Quando pensamos em ' + focus + ', também lembramos de tudo o que acontece nos bastidores: os dias difíceis, as dúvidas e os pequenos passos que quase ninguém percebe.',
-      'Nem sempre as pessoas sabem o que estamos enfrentando. Por isso, reconhecer a própria caminhada e respeitar o próprio processo também importa.',
-      'Guarde essa mensagem para reler quando precisar. Às vezes, é exatamente disso que a gente precisa.'
+      'Algumas mensagens fazem a gente parar por um instante e olhar para dentro.',
+      'Por trás de uma frase simples, pode existir um sentimento que muita gente guarda em silêncio.',
+      'Tem momentos em que tudo o que precisamos é encontrar palavras que façam sentido para o que estamos vivendo.',
+      'Nem tudo o que sentimos aparece por fora, e algumas mensagens lembram exatamente disso.'
     ],
     Conversacional: [
-      quoted,
-      'Mas como isso aparece na vida real? Muitas vezes, nos detalhes da rotina, nas escolhas que fazemos e na forma como reagimos ao que acontece.',
-      'O assunto ' + focus + ' pode ser visto de diferentes maneiras, porque cada pessoa carrega experiências e pontos de vista próprios.',
-      'Vale olhar para essa mensagem e pensar em como ela se encaixa no seu momento atual. Não precisa concordar com tudo, o importante é refletir.',
-      'E você, como enxerga essa frase? Conta nos comentários.'
+      'Pensa comigo: quantas vezes você já se identificou com uma frase assim?',
+      'Essa mensagem merece uma reflexão, principalmente quando a gente traz o assunto para a vida real.',
+      'É interessante como uma frase pode despertar interpretações diferentes em cada pessoa.',
+      'Agora, olha para essa mensagem e pensa em como ela se conecta com o seu dia a dia.'
     ]
   };
 
-  return captions[style].join('\\n\\n');
-}
+  const developments = {
+    Identificação: [
+      'Na prática, isso aparece em pequenas situações do cotidiano, nas escolhas, nas dúvidas e nas experiências que nem sempre compartilhamos com alguém.',
+      'Muitas pessoas passam por isso sem perceber que não estão sozinhas. Cada história é diferente, mas alguns sentimentos são mais comuns do que parecem.',
+      'Às vezes, a gente se cobra por não estar no mesmo ritmo dos outros e esquece que cada pessoa enfrenta uma realidade diferente.',
+      'É justamente nos detalhes da rotina que essa mensagem ganha significado, porque nem sempre aquilo que parece simples é fácil de viver.'
+    ],
+    Emocional: [
+      'Existem dias leves e outros em que seguir em frente exige mais força do que as pessoas imaginam. E nem todo processo precisa ser explicado para ser verdadeiro.',
+      'Cada pessoa carrega experiências que não aparecem em uma foto ou em uma publicação. Por isso, respeitar o próprio momento também é importante.',
+      'O que acontece por dentro nem sempre acompanha o que mostramos por fora. Reconhecer isso é uma forma de olhar para si com mais sinceridade.',
+      'Nem sempre temos todas as respostas. Às vezes, o primeiro passo é reconhecer o que estamos sentindo e entender o que essa experiência está ensinando.'
+    ],
+    Conversacional: [
+      'No dia a dia, isso pode aparecer de várias maneiras. O contexto muda, as experiências mudam, mas a reflexão continua fazendo sentido.',
+      'Cada pessoa pode enxergar essa mensagem de um jeito, dependendo do que já viveu e do momento em que está agora.',
+      'Não existe uma única forma de lidar com esse assunto. O importante é perceber como ele aparece nas nossas atitudes e escolhas.',
+      'Talvez você concorde, talvez tenha outra visão. E é justamente por isso que vale conversar sobre o assunto.'
+    ]
+  };
 
+  const reflections = [
+    'No fim, não é sobre comparar a sua caminhada com a de alguém, mas entender o que faz sentido para a sua realidade.',
+    'O mais importante é transformar essa reflexão em algo que tenha significado na sua própria vida.',
+    'Às vezes, mudar a forma de enxergar uma situação já é um começo importante.',
+    'Cada experiência deixa um aprendizado, mesmo quando a gente só consegue compreender isso algum tempo depois.'
+  ];
+
+  const callsToAction = {
+    Identificação: [
+      'Se você se identificou, compartilhe esta publicação com alguém que também pode se reconhecer nessa mensagem.',
+      'Se essa frase descreve algo que você já viveu, deixe sua experiência nos comentários.',
+      'Marque alguém que precisava encontrar essa mensagem hoje.'
+    ],
+    Emocional: [
+      'Guarde esta mensagem para reler quando precisar se lembrar disso.',
+      'Se tocou você de alguma forma, compartilhe com alguém especial.',
+      'Às vezes, alguém precisa ler exatamente isso. Envie esta publicação.'
+    ],
+    Conversacional: [
+      'E você, como interpreta essa mensagem? Conta nos comentários.',
+      'Você concorda com essa reflexão ou enxerga de outra maneira?',
+      'Quero saber sua opinião: isso faz sentido na sua vida?'
+    ]
+  };
+
+  return [
+    quoted,
+    pick(openings[style]),
+    pick(developments[style]),
+    pick(reflections),
+    pick(callsToAction[style])
+  ].join('\n\n');
+}
 function generateCaptions(phrase) {
   return ['Identificação', 'Emocional', 'Conversacional'].map((label) => ({
     label,
