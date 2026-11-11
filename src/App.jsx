@@ -6,50 +6,52 @@ const stopWords = new Set([
   'a','à','as','às','o','os','um','uma','uns','umas','de','da','das','do','dos','em','no','na','nos','nas',
   'por','para','com','sem','e','ou','que','se','é','ser','estar','foi','são','como','mais','menos','muito',
   'muita','meu','minha','seu','sua','seus','suas','eu','você','vocês','ele','ela','eles','elas','isso','essa',
-  'esse','essa','aquela','aquele','quando','onde','porque','mas','também','já','não','sim','ao','aos','ter'
+  'esse','aquela','aquele','quando','onde','porque','mas','também','já','não','sim','ao','aos','ter'
 ]);
 
-function getKeywords(idea) {
-  const words = idea.toLocaleLowerCase('pt-BR').match(/[\p{L}\p{N}]+/gu) || [];
-  const meaningful = words.filter((word) => word.length > 2 && !stopWords.has(word));
-  return [...new Set(meaningful)].slice(0, 5);
+function getKeywords(phrase) {
+  const words = phrase.toLocaleLowerCase('pt-BR').match(/[\\p{L}\\p{N}]+/gu) || [];
+  return [...new Set(words.filter((word) => word.length > 2 && !stopWords.has(word)))].slice(0, 5);
 }
 
-function buildCaption(rawIdea, style) {
-  const idea = rawIdea.trim().replace(/[.!?]+$/, '');
-  const quoted = '“' + idea + '”';
-  const keywords = getKeywords(idea);
-  const subject = keywords.length ? keywords.slice(0, 3).join(', ') : idea;
-  const variations = {
+function buildCaption(rawPhrase, style) {
+  const phrase = rawPhrase.trim().replace(/[.!?]+$/, '');
+  const quoted = '“' + phrase + '”';
+  const keywords = getKeywords(phrase);
+  const subject = keywords.slice(0, 3).join(', ');
+  const focus = subject || phrase;
+
+  const captions = {
     Identificação: [
-      'Quando você pensa em ' + quoted + ', talvez reconheça algo que já viveu. Nem sempre é fácil explicar essa sensação, mas muita gente passa por situações parecidas.',
-      'Essa ideia também aparece na vida real quando ' + subject + ' fazem parte das nossas escolhas. É nesse tipo de momento que a mensagem deixa de ser apenas palavras.',
-      'Talvez você já tenha tentado lidar com isso do seu jeito. Cada pessoa tem uma experiência diferente, mas encontrar alguém que entende o que sentimos faz diferença.',
-      'Por isso, vale olhar para ' + subject + ' com mais atenção e perceber como essa mensagem se conecta com a sua própria história.',
-      'Você já passou por algo que fez essa frase ganhar sentido?'
+      quoted,
+      'Quem já viveu algo parecido sabe que essa mensagem vai além das palavras. Existem momentos em que a gente se reconhece exatamente no que está escrito.',
+      'Na rotina, ' + focus + ' podem aparecer de formas diferentes para cada pessoa. Mesmo assim, certos sentimentos e experiências acabam aproximando histórias.',
+      'Talvez você também esteja passando por uma fase que faz essa frase ter ainda mais sentido. Cada um tem seu próprio caminho, seu tempo e suas batalhas.',
+      'Se essa mensagem falou com você, compartilhe com alguém que também precisa ler isso.'
     ],
     Emocional: [
-      'Às vezes, ' + quoted + ' toca em algo que a gente sente, mas não costuma dizer em voz alta. Algumas experiências ficam guardadas justamente porque significam mais do que parecem.',
-      'Quando ' + subject + ' entram nessa reflexão, podem trazer lembranças, dúvidas e sentimentos que cada pessoa reconhece de uma maneira.',
-      'Nem sempre conseguimos mudar uma situação imediatamente. Ainda assim, reconhecer o que ela desperta dentro de nós já é uma forma de começar a entendê-la.',
-      'Talvez essa seja a parte mais importante de ' + quoted + ': permitir que você olhe para o que está vivendo com sinceridade, sem se comparar com a jornada de ninguém.',
-      'Qual sentimento essa mensagem despertou em você?'
+      quoted,
+      'Tem frases que fazem a gente parar por alguns segundos, porque traduzem sentimentos que nem sempre conseguimos explicar.',
+      'Quando pensamos em ' + focus + ', também lembramos de tudo o que acontece nos bastidores: os dias difíceis, as dúvidas e os pequenos passos que quase ninguém percebe.',
+      'Nem sempre as pessoas sabem o que estamos enfrentando. Por isso, reconhecer a própria caminhada e respeitar o próprio processo também importa.',
+      'Guarde essa mensagem para reler quando precisar. Às vezes, é exatamente disso que a gente precisa.'
     ],
     Conversacional: [
-      'Vamos trazer ' + quoted + ' para o dia a dia. Onde essa ideia aparece na sua rotina, nas suas escolhas ou na maneira como você enxerga as coisas?',
-      'Pense em ' + subject + ' por um instante. É possível encontrar exemplos disso em situações simples, até naquelas que normalmente passam despercebidas.',
-      'E não precisa existir uma única interpretação. O contexto de cada pessoa muda a forma como uma mensagem é entendida.',
-      'O importante é não deixar ' + quoted + ' apenas como uma frase bonita. Vale pensar no que ela significa para você e no que pode ser aplicado à sua realidade.',
-      'Quero saber sua opinião: você concorda com essa ideia?'
+      quoted,
+      'Mas como isso aparece na vida real? Muitas vezes, nos detalhes da rotina, nas escolhas que fazemos e na forma como reagimos ao que acontece.',
+      'O assunto ' + focus + ' pode ser visto de diferentes maneiras, porque cada pessoa carrega experiências e pontos de vista próprios.',
+      'Vale olhar para essa mensagem e pensar em como ela se encaixa no seu momento atual. Não precisa concordar com tudo, o importante é refletir.',
+      'E você, como enxerga essa frase? Conta nos comentários.'
     ]
   };
-  return variations[style].join('\n\n');
+
+  return captions[style].join('\\n\\n');
 }
 
-function generateCaptions(idea) {
+function generateCaptions(phrase) {
   return ['Identificação', 'Emocional', 'Conversacional'].map((label) => ({
     label,
-    text: buildCaption(idea, label)
+    text: buildCaption(phrase, label)
   }));
 }
 
@@ -61,7 +63,7 @@ export default function App() {
 
   function generate() {
     if (!phrase.trim()) {
-      setError('Escreva uma frase ou ideia antes de gerar.');
+      setError('Digite uma frase antes de gerar.');
       setCaptions([]);
       return;
     }
@@ -87,18 +89,18 @@ export default function App() {
         <span className="top-note">GERADOR DE LEGENDAS PARA INSTAGRAM</span>
       </header>
       <section className="hero">
-        <div className="eyebrow"><span className="eyebrow-line" /> IDEIAS QUE CRIAM CONEXÃO</div>
+        <div className="eyebrow"><span className="eyebrow-line" /> FRASES QUE CRIAM CONEXÃO</div>
         <h1>Não escreva só uma legenda.<br /><span>Faça alguém se identificar.</span></h1>
-        <p className="hero-copy">Digite sua ideia e receba três versões de legenda para desenvolver sua mensagem e criar uma conversa com quem está lendo.</p>
+        <p className="hero-copy">Digite uma frase e receba três legendas prontas para publicar nas redes sociais, com textos conectados à mensagem original.</p>
       </section>
       <section className="generator-panel" aria-label="Gerador de legendas">
         <div className="panel-heading">
-          <div><span className="step">01</span><h2>O que você quer transmitir?</h2></div>
+          <div><span className="step">01</span><h2>Qual frase você quer transformar em legenda?</h2></div>
           <span className="optional">QUALQUER ASSUNTO</span>
         </div>
-        <label htmlFor="idea">SUA FRASE OU IDEIA</label>
-        <textarea id="idea" value={phrase} onChange={(event) => { setPhrase(event.target.value); setError(''); }} placeholder="Escreva do seu jeito, mesmo que seja uma frase curta ou uma ideia ainda desorganizada..." maxLength={1000} />
-        <div className="input-footer"><span>Não precisa escrever bonito. A ideia é o suficiente.</span><span>{phrase.length}/1000</span></div>
+        <label htmlFor="idea">SUA FRASE</label>
+        <textarea id="idea" value={phrase} onChange={(event) => { setPhrase(event.target.value); setError(''); }} placeholder="Cole ou escreva a frase que será usada na sua publicação..." maxLength={1000} />
+        <div className="input-footer"><span>Use a frase que deseja publicar nas suas redes sociais.</span><span>{phrase.length}/1000</span></div>
         {error && <p className="error" role="alert">{error}</p>}
         <button className="generate-button" onClick={generate} type="button">GERAR LEGENDAS <span aria-hidden="true">↗</span></button>
         
