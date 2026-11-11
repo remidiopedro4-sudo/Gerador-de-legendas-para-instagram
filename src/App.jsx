@@ -119,7 +119,7 @@ export default function App() {
         <div className="input-footer"><span>Não precisa escrever bonito. A ideia é o suficiente.</span><span>{phrase.length}/1000</span></div>
         {error && <p className="error" role="alert">{error}</p>}
         <button className="generate-button" onClick={generate} type="button">GERAR LEGENDAS <span aria-hidden="true">↗</span></button>
-        <p className="privacy-note"><span className="lock">◇</span> Três versões, cada uma com exatamente 5 parágrafos. Sem cadastro e sem API.</p>
+        
       </section>
       {captions.length > 0 && (
         <section className="results" aria-live="polite">
