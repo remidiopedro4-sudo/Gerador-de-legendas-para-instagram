@@ -160,13 +160,11 @@ function findAnime(input) {
 }
 
 function generateCaption(anime) {
-  return [
-    'Nome: ' + anime.title,
-    'Personagens principais: ' + anime.characters + '.',
-    'Enredo: ' + anime.plot,
-    'Destaques: ' + anime.highlights + '.',
-    'Siga o perfil para acompanhar mais animes, personagens e histórias.'
-  ].join('\\n\\n');
+  return `${anime.title} é um anime que acompanha uma história marcada por ${anime.highlights}. 
+
+A trama apresenta ${anime.plot.charAt(0).toLowerCase() + anime.plot.slice(1)} Entre os personagens estão ${anime.characters}.
+
+Qual é o seu personagem favorito dessa obra? Conta nos comentários e siga o perfil para ver mais conteúdos sobre o mundo dos animes!`;
 }
 
 export default function App() {
@@ -185,7 +183,7 @@ export default function App() {
     const anime = findAnime(animeName);
     if (!anime) {
       setError('Esse anime ainda não está no catálogo. Peça para adicionarmos esse título.');
-      setCaption([]);
+      setCaption('');
       return;
     }
 
@@ -213,7 +211,7 @@ export default function App() {
       <section className="hero">
         <div className="eyebrow"><span className="eyebrow-line" /> CONTEÚDO PARA PERFIS DE ANIMES</div>
         <h1>Seu anime merece<br /><span>uma legenda à altura.</span></h1>
-        <p className="hero-copy">Digite apenas o nome do anime e receba legendas prontas para publicar no seu perfil.</p>
+        <p className="hero-copy">Digite apenas o nome do anime e receba uma legenda pronta para publicar no seu perfil.</p>
       </section>
       <section className="generator-panel" aria-label="Gerador de legendas de animes">
         <div className="panel-heading">
@@ -230,7 +228,7 @@ export default function App() {
           placeholder="Ex.: Jujutsu Kaisen"
           maxLength={100}
         />
-        <div className="input-footer"><span>O gerador busca as informações no catálogo interno.</span><span>{animeName.length}/100</span></div>
+        <div className="input-footer"><span>Digite o nome e gere uma legenda completa.</span><span>{animeName.length}/100</span></div>
         {error && <p className="error" role="alert">{error}</p>}
         <button className="generate-button" onClick={generate} type="button">GERAR LEGENDA <span aria-hidden="true">↗</span></button>
       </section>
@@ -242,9 +240,9 @@ export default function App() {
           </div>
           <div className="caption-grid">
             <article className="caption-card">
-              <div className="card-top"><span className="card-number">01</span><span className="card-label">LEGENDA</span></div>
+              
               <p className="caption-text">{caption}</p>
-              <div className="paragraph-count">LEGENDA COMPLETA</div>
+              
               <button className={copied === 0 ? 'copy-button copied' : 'copy-button'} onClick={() => copyCaption(caption, 0)} type="button">
                 {copied === 0 ? 'COPIADO ✓' : 'COPIAR LEGENDA ↗'}
               </button>
