@@ -159,60 +159,39 @@ function findAnime(input) {
   );
 }
 
-const captionStyles = [
-  {
-    label: 'Apresentação',
-    opening: (anime) => 'Conheça um pouco mais sobre ' + anime.title + ', uma obra que conquistou espaço entre os fãs de anime.',
-    ending: 'Se você também gosta de animes, siga o perfil para acompanhar mais histórias e recomendações.'
-  },
-  {
-    label: 'Enredo',
-    opening: (anime) => anime.title + ' apresenta uma história cheia de acontecimentos e personagens marcantes.',
-    ending: 'Curte esse tipo de conteúdo? Siga o perfil e fique por dentro de mais animes.'
-  },
-  {
-    label: 'Destaques',
-    opening: (anime) => 'Se você ainda não conhece ' + anime.title + ', vale conhecer um pouco do universo dessa obra.',
-    ending: 'Siga o perfil para descobrir outros animes, personagens e histórias.'
-  }
-];
-
-function generateCaptions(anime) {
-  return captionStyles.map((style) => ({
-    label: style.label,
-    text: [
-      'Nome: ' + anime.title,
-      'Personagens principais: ' + anime.characters + '.',
-      'Enredo: ' + anime.plot,
-      'Destaques: ' + anime.highlights + '.',
-      style.ending
-    ].join('\n\n')
-  }));
+function generateCaption(anime) {
+  return [
+    'Nome: ' + anime.title,
+    'Personagens principais: ' + anime.characters + '.',
+    'Enredo: ' + anime.plot,
+    'Destaques: ' + anime.highlights + '.',
+    'Siga o perfil para acompanhar mais animes, personagens e histórias.'
+  ].join('\\n\\n');
 }
 
 export default function App() {
   const [animeName, setAnimeName] = useState('');
-  const [captions, setCaptions] = useState([]);
+  const [caption, setCaption] = useState('');
   const [copied, setCopied] = useState(-1);
   const [error, setError] = useState('');
 
   function generate() {
     if (!animeName.trim()) {
       setError('Digite o nome de um anime.');
-      setCaptions([]);
+      setCaption('');
       return;
     }
 
     const anime = findAnime(animeName);
     if (!anime) {
       setError('Esse anime ainda não está no catálogo. Peça para adicionarmos esse título.');
-      setCaptions([]);
+      setCaption([]);
       return;
     }
 
     setError('');
     setCopied(-1);
-    setCaptions(generateCaptions(anime));
+    setCaption(generateCaption(anime));
   }
 
   async function copyCaption(text, index) {
@@ -253,27 +232,24 @@ export default function App() {
         />
         <div className="input-footer"><span>O gerador busca as informações no catálogo interno.</span><span>{animeName.length}/100</span></div>
         {error && <p className="error" role="alert">{error}</p>}
-        <button className="generate-button" onClick={generate} type="button">GERAR LEGENDAS <span aria-hidden="true">↗</span></button>
+        <button className="generate-button" onClick={generate} type="button">GERAR LEGENDA <span aria-hidden="true">↗</span></button>
       </section>
-      {captions.length > 0 && (
+      {caption && (
         <section className="results" aria-live="polite">
           <div className="results-heading">
-            <div><span className="step">02</span><h2>Três versões para seu perfil</h2></div>
-            <span className="result-count">5 PARÁGRAFOS CADA</span>
+            <div><span className="step">02</span><h2>Sua legenda está pronta</h2></div>
+            <span className="result-count">UMA LEGENDA</span>
           </div>
           <div className="caption-grid">
-            {captions.map((caption, index) => (
-              <article className="caption-card" key={caption.label}>
-                <div className="card-top"><span className="card-number">0{index + 1}</span><span className="card-label">{caption.label}</span></div>
-                <p className="caption-text">{caption.text}</p>
-                <div className="paragraph-count">5 PARÁGRAFOS</div>
-                <button className={copied === index ? 'copy-button copied' : 'copy-button'} onClick={() => copyCaption(caption.text, index)} type="button">
-                  {copied === index ? 'COPIADO ✓' : 'COPIAR LEGENDA ↗'}
-                </button>
-              </article>
-            ))}
+            <article className="caption-card">
+              <div className="card-top"><span className="card-number">01</span><span className="card-label">LEGENDA</span></div>
+              <p className="caption-text">{caption}</p>
+              <div className="paragraph-count">LEGENDA COMPLETA</div>
+              <button className={copied === 0 ? 'copy-button copied' : 'copy-button'} onClick={() => copyCaption(caption, 0)} type="button">
+                {copied === 0 ? 'COPIADO ✓' : 'COPIAR LEGENDA ↗'}
+              </button>
+            </article>
           </div>
-          <button className="regenerate" onClick={generate} type="button">↻ CRIAR NOVAS VERSÕES</button>
         </section>
       )}
       <footer className="footer"><span>LEGENDA ANIME © {new Date().getFullYear()}</span><span>CONTEÚDO PARA QUEM AMA ANIMES.</span></footer>
